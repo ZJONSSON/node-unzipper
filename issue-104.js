@@ -217,6 +217,7 @@ const zip3 = async (file) => {
             }
         }
         process.stdout.write("\n");
+        zip.closeFileDescriptor();
         resolve();
     });
 };
