@@ -267,6 +267,7 @@ if (stats.isDirectory()) {
             .discard("big.zip")
             .discard("encrypted")
             .discard("broken")
+            .discard("zip-slip")
             .paths(filePath)
             .ext([".zip", ".epub", ".cbz"])
             .find();
