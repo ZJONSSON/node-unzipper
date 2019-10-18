@@ -61,6 +61,6 @@
   ],
   "main": "unzip.js",
   "scripts": {
-    "test": "tap test/*.js --jobs=10 --coverage-report=html --no-browser && node ./issue-104.js ./testData/ 2"
+    "test": "tap test/*.js --jobs=10 --coverage-report=html --no-browser"
   }
 }
