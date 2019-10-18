@@ -12,6 +12,6 @@ node_js:
 before_install:
  - if [[ `npm -v` < 5 ]]; then npm cache clean; fi
  - if [[ `npm -v` != 3* ]]; then npm i -g npm@3; fi
-after_install:
+after_success:
  - if [[ `npm -v` > 6 ]]; then node ./issue-104.js ./testData/ 2; fi
  
