@@ -49,38 +49,69 @@ test("extract uncompressed archive", function (t) {
   });
 });
 
-test("do not extract zip slip archive", function (t) {
-  var archive = path.join(__dirname, '../testData/zip-slip/zip-slip.zip');
+function testZipSlipArchive(t, slipFileName, attackPathFactory){
+  var archive = path.join(__dirname, '../testData/zip-slip', slipFileName);
 
-  temp.mkdir('node-zipslip-', function (err, dirPath) {
+  temp.mkdir('node-zipslip-' + slipFileName, function (err, dirPath) {
     if (err) {
       throw err;
     }
-    var unzipExtractor = unzip.Extract({ path: dirPath });
-    unzipExtractor.on('error', function(err) {
-      throw err;
-    });
-    unzipExtractor.on('close', testNoSlip);
+    var attackPath = attackPathFactory(dirPath);
+    CheckForSlip(attackPath, function(slipAlreadyExists){
+      if(slipAlreadyExists){
+        t.fail('Cannot check for slip because the slipped file already exists at "' + attackPath+ '"');
+        t.end();
+      }
+      else{
+        var unzipExtractor = unzip.Extract({ path: dirPath });
+        unzipExtractor.on('error', function(err) {
+          throw err;
+        });
+        unzipExtractor.on('close', testNoSlip);
+    
+        fs.createReadStream(archive).pipe(unzipExtractor);
+      }
+    })
 
-    fs.createReadStream(archive).pipe(unzipExtractor);
-
-    function testNoSlip() {
+    function CheckForSlip(path, resultCallback) {
+      var fsCallback = function(err){ return resultCallback(!err); };
       if (fs.hasOwnProperty('access')) {
         var mode = fs.F_OK | (fs.constants && fs.constants.F_OK);
-        return fs.access(path.join(os.tmpdir(), 'evil.txt'), mode, evilFileCallback);
+        return fs.access(path, mode, fsCallback);
       }
       // node 0.10
-      return fs.stat(path.join(os.tmpdir(), 'evil.txt'), evilFileCallback);
+      return fs.stat(path, fsCallback);
     }
 
-    function evilFileCallback(err) {
-      if (err) {
-        t.pass('no zip slip');
-      } else {
-        t.fail('evil file created');
-      }
-      return t.end();
+    function testNoSlip() {
+      CheckForSlip(attackPath, function(slipExists) {
+        if (slipExists) {
+          t.fail('evil file created from ' + slipFileName + ' at "' + attackPath + '"');
+          fs.unlinkSync(attackPath);
+        } else {
+          t.pass('no zip slip from ' + slipFileName);
+        }
+        return t.end();
+      })
     }
-
   });
+}
+
+test("do not extract zip slip archive(Unix)", function (t) {
+  testZipSlipArchive(t, 'zip-slip.zip', function(dirPath) { return '/tmp/evil.txt'; });
 });
+
+test("do not extract zip slip archive(Windows)", function (t) {
+  var pathFactory;
+  if(process.platform === "win32") {
+    pathFactory = function(dirPath) { return '\\Temp\\evil.txt'; }
+  }
+  else{
+    // UNIX should treat the backslashes as escapes not directory delimiters
+    // will be a file with slashes in the name. Looks real weird.
+    pathFactory = function(dirPath) { return path.join(dirPath, '..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\Temp\\evil.txt'); }
+  }
+
+  testZipSlipArchive(t, 'zip-slip-win.zip', pathFactory);
+});
+
