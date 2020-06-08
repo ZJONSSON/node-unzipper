@@ -77,16 +77,18 @@ fs.createReadStream('path/to/archive.zip')
   });
 ```
 
-and the same example using async iterators:
+and the same example using async iterators on node v12 and above:
 
 ```js
 const zip = fs.createReadStream('path/to/archive.zip').pipe(unzipper.Parse({forceStream: true}));
-for await (const entry of zip) {
+for await (const entry of unzipper.iterateStream(zip)) {
   const fileName = entry.path;
   const type = entry.type; // 'Directory' or 'File'
   const size = entry.vars.uncompressedSize; // There is also compressedSize;
   if (fileName === "this IS the file I'm looking for") {
-    entry.pipe(fs.createWriteStream('output/path'));
+    for await (const chunk of unzipper.iterateStream(entry)) {
+      console.log(chunk);
+    }
   } else {
     entry.autodrain();
   }
