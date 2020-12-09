@@ -314,6 +314,9 @@ async function main() {
   // ...
 }
 
+main();
+```
+
 ### Open.custom(source, [options])
 This function can be used to provide a custom source implementation. The source parameter expects a `stream` and a `size` function to be implemented. The size function should return a `Promise` that resolves the total size of the file. The stream function should return a chunk of a `Readable` stream given the offset and length parameters.
 
