@@ -323,24 +323,27 @@ This function can be used to provide a custom source implementation. The source 
 Example:
 
 ```js
-// Custom source implementation for reading a file from disk
-const customSource = {
-  stream: function(offset,length) {
-    return fs.createReadStream(archive, {start: offset, end: length && offset+length});
-  },
-  size: function() {
-    return new Promise(function(resolve, reject) {
-      fs.stat(archive, function(err, d) {
-        if (err)
-          reject(err);
-        else
-          resolve(d.size);
-      });
-    });
-  }
-};
+// Custom source implementation for reading a zip file from Google Cloud Storage
+const { Storage } = require('@google-cloud/storage');
 
 async function main() {
+  const storage = new Storage();
+  const bucket = storage.bucket('my-bucket');
+  const zipFile = bucket.file('my-zip-file.zip');
+  
+  const customSource = {
+    stream: function(offset, length) {
+      return zipFile.createReadStream({
+        start: offset,
+        end: length && offset + length
+      })
+    },
+    size: async function() {
+      const objMetadata = (await zipFile.getMetadata())[0];
+      return objMetadata.size;
+    }
+  };
+
   const directory = await unzipper.Open.custom(customSource);
   console.log('directory', directory);
   // ...
