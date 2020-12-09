@@ -314,6 +314,35 @@ async function main() {
   // ...
 }
 
+### Open.custom(source, [options])
+This function can be used to provide a custom source implementation. The source parameter expects a `stream` and a `size` function to be implemented. The size function should return a `Promise` that resolves the total size of the file. The stream function should return a chunk of a `Readable` stream given the offset and length parameters.
+
+Example:
+
+```js
+// Custom source implementation for reading a file from disk
+const customSource = {
+  stream: function(offset,length) {
+    return fs.createReadStream(archive, {start: offset, end: length && offset+length});
+  },
+  size: function() {
+    return new Promise(function(resolve, reject) {
+      fs.stat(archive, function(err, d) {
+        if (err)
+          reject(err);
+        else
+          resolve(d.size);
+      });
+    });
+  }
+};
+
+async function main() {
+  const directory = await unzipper.Open.custom(customSource);
+  console.log('directory', directory);
+  // ...
+}
+
 main();
 ```
 
