@@ -35,6 +35,7 @@
     "setimmediate": "~1.0.4"
   },
   "devDependencies": {
+    "@google-cloud/storage": "^5.16.1",
     "aws-sdk": "^2.77.0",
     "dirdiff": ">= 0.0.1 < 1",
     "iconv-lite": "^0.4.24",
