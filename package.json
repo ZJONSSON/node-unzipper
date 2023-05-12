@@ -37,11 +37,14 @@
   "devDependencies": {
     "aws-sdk": "^2.77.0",
     "dirdiff": ">= 0.0.1 < 1",
+    "filehound": "^1.17.3",
     "iconv-lite": "^0.4.24",
+    "node-stream-zip": "^1.8.2",
     "request": "^2.88.0",
     "stream-buffers": ">= 0.2.5 < 1",
     "tap": ">= 0.3.0 < 1",
-    "temp": ">= 0.4.0 < 1"
+    "temp": ">= 0.4.0 < 1",
+    "yauzl": "^2.10.0"
   },
   "directories": {
     "example": "examples",
