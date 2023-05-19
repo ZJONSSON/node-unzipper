@@ -43,7 +43,7 @@ fs.createReadStream('path/to/archive.zip')
   .pipe(unzipper.Extract({ path: 'output/path' }));
 ```
 
-Extract emits the 'close' event once the zip's contents have been fully extracted to disk. `Extract` uses [fstream.Writer](https://www.npmjs.com/package/fstream) and therefore needs need an absolute path to the destination directory.  This directory will be automatically created if it doesn't already exits.
+Extract emits the 'close' event once the zip's contents have been fully extracted to disk. `Extract` uses [fstream.Writer](https://www.npmjs.com/package/fstream) and therefore needs need an absolute path to the destination directory.  This directory will be automatically created if it doesn't already exist.
 
 ### Parse zip file contents
 
