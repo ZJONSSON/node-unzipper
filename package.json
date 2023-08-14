@@ -24,7 +24,6 @@
   "license": "MIT",
   "dependencies": {
     "big-integer": "^1.6.17",
-    "binary": "~0.3.0",
     "bluebird": "~3.4.1",
     "buffer-indexof-polyfill": "~1.0.0",
     "duplexer2": "~0.1.4",
