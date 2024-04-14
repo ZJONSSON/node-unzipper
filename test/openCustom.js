@@ -11,7 +11,7 @@ test("get content of a single file entry out of a zip", function (t) {
 
   var customSource = {
     stream: function(offset,length) {
-      return fs.createReadStream(archive, {start: offset, end: length && offset+length});
+      return Promise.resolve(fs.createReadStream(archive, {start: offset, end: length && offset+length}));
     },
     size: function() {
       return new Promise(function(resolve, reject) {
