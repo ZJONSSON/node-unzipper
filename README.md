@@ -1,7 +1,6 @@
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
-[![Test Coverage][travis-image]][travis-url]
-[![Coverage][coverage-image]][coverage-url]
+[![code coverage](https://zjonsson.github.io/node-unzipper/badge.svg)](https://zjonsson.github.io/node-unzipper/) 
 
 [npm-image]: https://img.shields.io/npm/v/unzipper.svg
 [npm-url]: https://npmjs.org/package/unzipper
@@ -43,7 +42,7 @@ fs.createReadStream('path/to/archive.zip')
   .pipe(unzipper.Extract({ path: 'output/path' }));
 ```
 
-Extract emits the 'close' event once the zip's contents have been fully extracted to disk. `Extract` uses [fstream.Writer](https://www.npmjs.com/package/fstream) and therefore needs need an absolute path to the destination directory.  This directory will be automatically created if it doesn't already exits.
+Extract emits the 'close' event once the zip's contents have been fully extracted to disk. `Extract` uses [fstream.Writer](https://www.npmjs.com/package/fstream) and therefore needs an absolute path to the destination directory.  This directory will be automatically created if it doesn't already exist.
 
 ### Parse zip file contents
 
@@ -207,7 +206,7 @@ fs.createReadStream('path/to/archive.zip')
 ## Open
 Previous methods rely on the entire zipfile being received through a pipe.  The Open methods load take a different approach: load the central directory first (at the end of the zipfile) and provide the ability to pick and choose which zipfiles to extract, even extracting them in parallel.   The open methods return a promise on the contents of the directory, with individual `files` listed in an array.   Each file element has the following methods:
 * `stream([password])` - returns a stream of the unzipped content which can be piped to any destination
-* `buffer([password])` - returns a promise on the buffered content of the file)
+* `buffer([password])` - returns a promise on the buffered content of the file.
 If the file is encrypted you will have to supply a password to decrypt, otherwise you can leave blank.
 Unlike `adm-zip` the Open methods will never read the entire zipfile into buffer.
 

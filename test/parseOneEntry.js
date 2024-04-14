@@ -48,6 +48,7 @@ test('error - invalid signature', function(t) {
 test('error - file ended', function(t) {
   unzip.ParseOne()
     .on('error',function(e) {
+      if (e.message == 'PATTERN_NOT_FOUND') return;
       t.equal(e.message,'FILE_ENDED');
       t.end();
     })

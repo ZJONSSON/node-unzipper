@@ -1,6 +1,6 @@
 {
   "name": "unzipper",
-  "version": "0.10.14",
+  "version": "0.11.1",
   "description": "Unzip cross-platform streaming API ",
   "author": "Evan Oxfeld <eoxfeld@gmail.com>",
   "contributors": [
@@ -24,15 +24,10 @@
   "license": "MIT",
   "dependencies": {
     "big-integer": "^1.6.17",
-    "binary": "~0.3.0",
     "bluebird": "~3.4.1",
-    "buffer-indexof-polyfill": "~1.0.0",
     "duplexer2": "~0.1.4",
     "fstream": "^1.0.12",
-    "graceful-fs": "^4.2.2",
-    "listenercount": "~1.0.1",
-    "readable-stream": "~2.3.6",
-    "setimmediate": "~1.0.4"
+    "graceful-fs": "^4.2.2"
   },
   "devDependencies": {
     "aws-sdk": "^2.77.0",
@@ -40,7 +35,7 @@
     "iconv-lite": "^0.4.24",
     "request": "^2.88.0",
     "stream-buffers": ">= 0.2.5 < 1",
-    "tap": ">= 0.3.0 < 1",
+    "tap": "^18.7.2",
     "temp": ">= 0.4.0 < 1"
   },
   "directories": {
@@ -58,6 +53,6 @@
   ],
   "main": "unzip.js",
   "scripts": {
-    "test": "tap test/*.js --jobs=10 --coverage-report=html --no-browser"
+    "test": "npx tap --coverage-report=lcov --coverage-report=html --allow-incomplete-coverage"
   }
 }

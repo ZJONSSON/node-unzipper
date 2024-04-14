@@ -37,7 +37,7 @@ test('parse/extract crx archive', function (t) {
   });
 });
 
-test('open methods', function(t) {
+test('open methods', async function(t) {
   var archive = path.join(__dirname, '../testData/compressed-standard-crx/archive.crx');
   var buffer = fs.readFileSync(archive);
   var request = require('request');
@@ -60,8 +60,8 @@ test('open methods', function(t) {
     // {name: 's3', args: [s3, { Bucket: 'unzipper', Key: 'archive.crx'}]}
   ];
 
-  tests.forEach(function(test) {
-    t.test(test.name, function(t) {
+  for (let test of tests) {
+    t.test(test.name, async function(t) {
       t.test('opening with crx option', function(t) {
         var method = unzip.Open[test.name];
         method.apply(method, test.args.concat({crx:true}))
@@ -74,5 +74,6 @@ test('open methods', function(t) {
         });
       });
     });
-  });
+  };
+  t.end();
 });

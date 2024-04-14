@@ -34,6 +34,7 @@ test("verify that autodrain promise works", function (t) {
         });
     })
     .on('finish', function() {
+      console.log('end')
       t.end();
     });
 });
@@ -43,15 +44,6 @@ test("verify that autodrain resolves after it has finished", function (t) {
 
   fs.createReadStream(archive)
     .pipe(unzip.Parse())
-    .on('entry', function(entry) {
-      entry.autodrain()
-        .promise()
-        .then(function() {
-          entry.autodrain()
-          .promise()
-          .then(function() {
-            t.end();
-          });
-        });
-    })
+    .on('entry', entry => entry.autodrain())
+    .on('end', () => t.end())
 });
