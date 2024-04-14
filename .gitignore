@@ -3,3 +3,4 @@
 /test.js
 /.nyc_output/
 /coverage/
+.tap/

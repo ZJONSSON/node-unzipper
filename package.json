@@ -40,7 +40,7 @@
     "iconv-lite": "^0.4.24",
     "request": "^2.88.0",
     "stream-buffers": ">= 0.2.5 < 1",
-    "tap": ">= 0.3.0 < 1",
+    "tap": "^18.7.2",
     "temp": ">= 0.4.0 < 1"
   },
   "directories": {
@@ -58,6 +58,6 @@
   ],
   "main": "unzip.js",
   "scripts": {
-    "test": "tap test/*.js --jobs=10 --coverage-report=html --no-browser"
+    "test": "npx tap --coverage-report=lcov --coverage-report=html --allow-incomplete-coverage"
   }
 }
