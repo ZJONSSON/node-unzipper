@@ -19,6 +19,7 @@ jobs:
           node-version: 18.x
       - run: npm install
       - run: npx eslint .
+      - run: npx tsc -p jsconfig.json
 
   test:
     runs-on: ubuntu-latest

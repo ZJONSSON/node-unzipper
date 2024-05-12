@@ -30,7 +30,10 @@
     "graceful-fs": "^4.2.2"
   },
   "devDependencies": {
+    "typescript": "^5.4.5",
     "@eslint/js": "^9.2.0",
+    "@types/bluebird": "^3.5.42",
+    "@types/node": "^20.12.11",
     "aws-sdk": "^2.77.0",
     "dirdiff": ">= 0.0.1 < 1",
     "eslint": "^9.2.0",
