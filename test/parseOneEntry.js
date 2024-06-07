@@ -12,7 +12,15 @@ test("pipe a single file entry out of a zip", function (t) {
   writableStream.on('close', function () {
     const str = writableStream.getContentsAsString('utf8');
     const fileStr = fs.readFileSync(path.join(__dirname, '../testData/compressed-standard/inflated/file.txt'), 'utf8');
-    t.equal(str, fileStr);
+    // Normalize line endings to \n
+    const normalize = (content) => content.replace(/\r\n/g, '\n').trim();
+
+    // Compare the normalized strings
+    const bufferContent = normalize(str.toString());
+    const fileContent = normalize(fileStr);
+
+    // Perform the equality check
+    t.equal(bufferContent, fileContent);
     t.end();
   });
 

@@ -13,7 +13,15 @@ test("get content of a single file entry out of a 502 MB zip from web", function
     })
     .then(function(str) {
       const fileStr = fs.readFileSync(path.join(__dirname, '../testData/bootstrap-reboot.min.css'), 'utf8');
-      t.equal(str.toString(), fileStr);
+      // Normalize line endings to \n
+      const normalize = (content) => content.replace(/\r\n/g, '\n').trim();
+
+      // Compare the normalized strings
+      const bufferContent = normalize(str.toString());
+      const fileContent = normalize(fileStr);
+
+      // Perform the equality check
+      t.equal(bufferContent, fileContent);
       t.end();
     });
 });

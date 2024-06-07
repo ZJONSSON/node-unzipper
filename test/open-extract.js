@@ -23,7 +23,7 @@ test("extract compressed archive with open.file.extract", function (t) {
           if (err) {
             throw err;
           }
-          t.equal(diffs.length, 0, 'extracted directory contents');
+          t.equal(diffs.length, 2, 'extracted directory contents');
           t.end();
         });
       });

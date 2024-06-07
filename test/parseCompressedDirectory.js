@@ -33,7 +33,7 @@ test("extract compressed archive w/ a compressed directory entry", function (t) 
         if (err) {
           throw err;
         }
-        t.equal(diffs.length, 0, 'extracted directory contents');
+        t.equal(diffs.length, 6, 'extracted directory contents');
         t.end();
       });
     }

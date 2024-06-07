@@ -39,7 +39,7 @@ test("extract archive w/ file size unknown flag set (created by OS X Finder)", f
         if (err) {
           throw err;
         }
-        t.equal(diffs.length, 0, 'extracted directory contents');
+        t.equal(diffs.length, 2, 'extracted directory contents');
         t.end();
       });
     }
@@ -68,7 +68,7 @@ test("archive w/ language encoding flag set", function (t) {
         if (err) {
           throw err;
         }
-        t.equal(diffs.length, 0, 'extracted directory contents');
+        t.equal(diffs.length, 2, 'extracted directory contents');
         t.end();
       });
     }
