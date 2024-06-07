@@ -15,6 +15,10 @@
     {
       "name": "Joe Ferner",
       "email": "joe.ferner@nearinfinity.com"
+    },
+    {
+      "name": "Ayush Aher",
+      "email": "ayushaher118@gmail.com"
     }
   ],
   "repository": {
@@ -23,22 +27,22 @@
   },
   "license": "MIT",
   "dependencies": {
+    "axios": "^1.7.2",
     "big-integer": "^1.6.17",
     "bluebird": "~3.4.1",
     "duplexer2": "~0.1.4",
-    "fstream": "^1.0.12",
+    "fs-extra": "^11.2.0",
     "graceful-fs": "^4.2.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.2.0",
-    "aws-sdk": "^2.77.0",
+    "aws-sdk": "^2.1636.0",
     "dirdiff": ">= 0.0.1 < 1",
     "eslint": "^9.2.0",
     "globals": "^15.2.0",
     "iconv-lite": "^0.4.24",
-    "request": "^2.88.0",
     "stream-buffers": ">= 0.2.5 < 1",
-    "tap": "^12.7.0",
+    "tap": "^19.2.2",
     "temp": ">= 0.4.0 < 1"
   },
   "directories": {
