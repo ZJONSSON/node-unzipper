@@ -60,6 +60,6 @@
   ],
   "main": "unzip.js",
   "scripts": {
-    "test": "npx tap test/*.js --coverage-report=html"
+    "test": "npx tap --debug test/*.js --coverage-report=html"
   }
 }
