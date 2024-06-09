@@ -23,7 +23,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "bluebird": "~3.4.1",
+    "bluebird": "~3.7.2",
     "duplexer2": "~0.1.4",
     "fs-extra": "^11.2.0",
     "graceful-fs": "^4.2.2",
