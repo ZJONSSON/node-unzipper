@@ -41,6 +41,9 @@
     "tap": "^12.7.0",
     "temp": ">= 0.4.0 < 1"
   },
+  "peerDependencies": {
+    "@aws-sdk/client-s3": "^3.0.0"
+  },
   "directories": {
     "example": "examples",
     "test": "test"
