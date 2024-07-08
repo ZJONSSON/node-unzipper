@@ -30,6 +30,7 @@
     "node-int64": "^0.4.0"
   },
   "devDependencies": {
+    "@aws-sdk/client-s3": "^3.0.0",
     "@eslint/js": "^9.2.0",
     "aws-sdk": "^2.1636.0",
     "dirdiff": ">= 0.0.1 < 1",
