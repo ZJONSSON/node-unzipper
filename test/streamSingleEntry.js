@@ -6,7 +6,7 @@ const unzip = require('../');
 const Stream = require('stream');
 
 test("pipe a single file entry out of a zip", function (t) {
-  const receiver = Stream.Transform({objectMode:true});
+  const receiver = new Stream.Transform({objectMode:true});
   receiver._transform = function(entry, e, cb) {
     if (entry.path === 'file.txt') {
       const writableStream = new streamBuffers.WritableStreamBuffer();

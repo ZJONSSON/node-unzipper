@@ -63,7 +63,7 @@ test("do not extract zip slip archive", function (t) {
     fs.createReadStream(archive).pipe(unzipExtractor);
 
     function testNoSlip() {
-      const mode = fs.F_OK | (fs.constants && fs.constants.F_OK);
+      const mode = fs.constants.F_OK | (fs.constants && fs.constants.F_OK);
       return fs.access(path.join(os.tmpdir(), 'evil.txt'), mode, evilFileCallback);
     }
 
@@ -105,7 +105,7 @@ function testZipSlipArchive(t, slipFileName, attackPathFactory){
 
     function CheckForSlip(path, resultCallback) {
       const fsCallback = function(err){ return resultCallback(!err); };
-      const mode = fs.F_OK | (fs.constants && fs.constants.F_OK);
+      const mode = fs.constants.F_OK | (fs.constants && fs.constants.F_OK);
       return fs.access(path, mode, fsCallback);
     }
 

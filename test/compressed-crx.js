@@ -42,17 +42,19 @@ test('open methods', async function(t) {
   const s3 = new AWS.S3({region: 'us-east-1'});
 
   // We have to modify the `getObject` and `headObject` to use makeUnauthenticated
+  //@ts-ignore
   s3.getObject = function(params, cb) {
     return s3.makeUnauthenticatedRequest('getObject', params, cb);
   };
 
+  //@ts-ignore
   s3.headObject = function(params, cb) {
     return s3.makeUnauthenticatedRequest('headObject', params, cb);
   };
 
   const tests = [
-    {name: 'buffer', args: [buffer]},
-    {name: 'file', args: [archive]},
+    {name: 'buffer', args: [buffer, {crx: true}]},
+    {name: 'file', args: [archive, {crx: true}]},
     // {name: 'url', args: [request, 'https://s3.amazonaws.com/unzipper/archive.crx']},
     // {name: 's3', args: [s3, { Bucket: 'unzipper', Key: 'archive.crx'}]}
   ];
@@ -61,7 +63,7 @@ test('open methods', async function(t) {
     t.test(test.name, async function(t) {
       t.test('opening with crx option', function(t) {
         const method = unzip.Open[test.name];
-        method.apply(method, test.args.concat({crx:true}))
+        method.apply(method, test.args)
           .then(function(d) {
             return d.files[1].buffer();
           })
