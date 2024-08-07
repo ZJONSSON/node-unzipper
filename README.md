@@ -111,9 +111,12 @@ async function getFile(req, res, next) {
 ```
 
 
-### Open.s3([aws-sdk], [params], [options])
+### Open.s3([aws-sdk/clients/s3], [params], [options])
 
 This function will return a Promise to the central directory information from a zipfile on S3.  Range-headers are used to avoid reading the whole file.    Unzipper does not ship with with the aws-sdk so you have to provide an instantiated client as first arguments.    The params object requires `Bucket` and `Key` to fetch the correct file.
+
+Supports AWS JavaScript SDK v2 (`aws-sdk/clients/s3`).
+See [Open.s3_v3()](#opens3_v3aws-sdk-params-options) for v3 support (`@aws-sdk/client-s3`).
 
 Example:
 
@@ -136,6 +139,30 @@ async function main() {
 main();
 ```
 
+### Open.s3_v3([@aws-sdk/client-s3], [params], [options])
+
+Same as [Open.s3()](#opens3aws-sdk-params-options), but for AWS JavaScript SDK v3 (`@aws-sdk/client-s3`).
+
+Example:
+
+```js
+const unzipper = require('./unzip');
+const { S3Client } = require('@aws-sdk/client-s3');
+const s3Client = new S3Client(config);
+
+async function main() {
+  const directory = await unzipper.Open.s3_v3(s3Client,{Bucket: 'unzipper', Key: 'archive.zip'});
+  return new Promise( (resolve, reject) => {
+    directory.files[0]
+      .stream()
+      .pipe(fs.createWriteStream('firstFile'))
+      .on('error',reject)
+      .on('finish',resolve)
+  });
+}
+
+main();
+```
 
 ### Open.buffer(buffer, [options])
 
