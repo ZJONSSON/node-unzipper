@@ -1,23 +1,33 @@
-[![NPM Version][npm-image]][npm-url]
-[![NPM Downloads][downloads-image]][downloads-url]
-[![code coverage](https://zjonsson.github.io/node-unzipper/badge.svg)](https://zjonsson.github.io/node-unzipper/) 
-
-[npm-image]: https://img.shields.io/npm/v/unzipper.svg
-[npm-url]: https://npmjs.org/package/unzipper
-[travis-image]: https://api.travis-ci.org/ZJONSSON/node-unzipper.png?branch=master
-[travis-url]: https://travis-ci.org/ZJONSSON/node-unzipper?branch=master
-[downloads-image]: https://img.shields.io/npm/dm/unzipper.svg
-[downloads-url]: https://npmjs.org/package/unzipper
-[coverage-image]: https://3tjjj5abqi.execute-api.us-east-1.amazonaws.com/prod/node-unzipper/badge
-[coverage-url]: https://3tjjj5abqi.execute-api.us-east-1.amazonaws.com/prod/node-unzipper/url
-
 # unzipper
+
+[![npm](https://img.shields.io/npm/v/@zklogic/unzipper)](https://www.npmjs.com/package/@zklogic/unzipper)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+Unzip cross-platform streaming API.
+
+> **Fork of [ZJONSSON/node-unzipper](https://github.com/ZJONSSON/node-unzipper)**.
+> Original package published to npm as [`unzipper`](https://www.npmjs.com/package/unzipper).
+> This fork is maintained by [Arfan Khalil Mughal](https://github.com/ArfanKhalilMughal)
+> at [ArfanKhalilMughal/node-unzipper](https://github.com/ArfanKhalilMughal/node-unzipper)
+> and published to npm as [`@zklogic/unzipper`](https://www.npmjs.com/package/@zklogic/unzipper).
+
+---
 
 ## Installation
 
 ```bash
-$ npm install unzipper
+npm install @zklogic/unzipper
 ```
+
+---
+
+## Changes in This Fork
+
+- Published package scope is `@zklogic/unzipper`.
+- Repository moved to <https://github.com/ArfanKhalilMughal/node-unzipper>.
+- Removed `node-int64` dependency from decrypt path and retained native unsigned 32-bit behavior.
+
+---
 
 ## Open methods
 
@@ -75,7 +85,7 @@ Live Example: (extracts a tiny xml file from the middle of a 500MB zipfile)
 
 ```js
 const request = require('request');
-const unzipper = require('./unzip');
+const unzipper = require('@zklogic/unzipper');
 
 async function main() {
   const directory = await unzipper.Open.url(request,'http://www2.census.gov/geo/tiger/TIGER2015/ZCTA5/tl_2015_us_zcta510.zip');
@@ -118,7 +128,7 @@ This function will return a Promise to the central directory information from a 
 Example:
 
 ```js
-const unzipper = require('./unzip');
+const unzipper = require('@zklogic/unzipper');
 const AWS = require('aws-sdk');
 const s3Client = AWS.S3(config);
 

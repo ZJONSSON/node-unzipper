@@ -1,8 +1,12 @@
 {
-  "name": "unzipper",
-  "version": "0.12.3",
+  "name": "@zklogic/unzipper",
+  "version": "0.12.4",
   "description": "Unzip cross-platform streaming API ",
-  "author": "Evan Oxfeld <eoxfeld@gmail.com>",
+  "author": {
+    "email": "arfankhalil@hotmail.com",
+    "name": "Arfan Khalil Mughal",
+    "url": "https://github.com/ArfanKhalilMughal"
+  },
   "contributors": [
     {
       "name": "Ziggy Jonsson",
@@ -19,15 +23,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/ZJONSSON/node-unzipper.git"
+    "url": "https://github.com/ArfanKhalilMughal/node-unzipper.git"
   },
   "license": "MIT",
   "dependencies": {
     "bluebird": "~3.7.2",
     "duplexer2": "~0.1.4",
     "fs-extra": "^11.2.0",
-    "graceful-fs": "^4.2.2",
-    "node-int64": "^0.4.0"
+    "graceful-fs": "^4.2.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.2.0",
