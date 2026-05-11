@@ -1,6 +1,6 @@
 {
   "name": "@zklogic/unzipper",
-  "version": "0.12.4",
+  "version": "0.13.0",
   "description": "Unzip cross-platform streaming API ",
   "author": {
     "email": "arfankhalil@hotmail.com",
