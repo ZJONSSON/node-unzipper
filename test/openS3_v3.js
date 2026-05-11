@@ -2,10 +2,17 @@ const test = require("tap").test;
 const unzip = require("../unzip");
 
 const version = +process.version.replace("v", "").split(".")[0];
+const hasAwsCredentials = Boolean(
+  process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY
+);
+const skipReason =
+  version < 16
+    ? "Skipping: Node.js < 16"
+    : !hasAwsCredentials && "Skipping: No AWS credentials available";
 
 test(
   "get content of a single file entry out of a zip",
-  { skip: version < 16 },
+  { skip: skipReason },
   function (t) {
     const { S3Client } = require("@aws-sdk/client-s3");
 
