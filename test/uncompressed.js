@@ -5,6 +5,69 @@ const path = require('path');
 const temp = require('temp');
 const dirdiff = require('dirdiff');
 const unzip = require('../');
+const Stream = require('stream');
+
+function createStoredZip(entryPath, contents) {
+  const fileName = Buffer.from(entryPath);
+  const data = Buffer.from(contents);
+  const localHeader = Buffer.alloc(30);
+  const centralHeader = Buffer.alloc(46);
+  const endRecord = Buffer.alloc(22);
+  let offset = 0;
+
+  localHeader.writeUInt32LE(0x04034b50, offset); offset += 4;
+  localHeader.writeUInt16LE(20, offset); offset += 2;
+  localHeader.writeUInt16LE(0, offset); offset += 2;
+  localHeader.writeUInt16LE(0, offset); offset += 2;
+  localHeader.writeUInt16LE(0, offset); offset += 2;
+  localHeader.writeUInt16LE(0, offset); offset += 2;
+  localHeader.writeUInt32LE(0, offset); offset += 4;
+  localHeader.writeUInt32LE(data.length, offset); offset += 4;
+  localHeader.writeUInt32LE(data.length, offset); offset += 4;
+  localHeader.writeUInt16LE(fileName.length, offset); offset += 2;
+  localHeader.writeUInt16LE(0, offset);
+
+  offset = 0;
+  centralHeader.writeUInt32LE(0x02014b50, offset); offset += 4;
+  centralHeader.writeUInt16LE(20, offset); offset += 2;
+  centralHeader.writeUInt16LE(20, offset); offset += 2;
+  centralHeader.writeUInt16LE(0, offset); offset += 2;
+  centralHeader.writeUInt16LE(0, offset); offset += 2;
+  centralHeader.writeUInt16LE(0, offset); offset += 2;
+  centralHeader.writeUInt16LE(0, offset); offset += 2;
+  centralHeader.writeUInt32LE(0, offset); offset += 4;
+  centralHeader.writeUInt32LE(data.length, offset); offset += 4;
+  centralHeader.writeUInt32LE(data.length, offset); offset += 4;
+  centralHeader.writeUInt16LE(fileName.length, offset); offset += 2;
+  centralHeader.writeUInt16LE(0, offset); offset += 2;
+  centralHeader.writeUInt16LE(0, offset); offset += 2;
+  centralHeader.writeUInt16LE(0, offset); offset += 2;
+  centralHeader.writeUInt16LE(0, offset); offset += 2;
+  centralHeader.writeUInt32LE(0, offset); offset += 4;
+  centralHeader.writeUInt32LE(0, offset);
+
+  const centralDirectoryOffset = localHeader.length + fileName.length + data.length;
+  const centralDirectorySize = centralHeader.length + fileName.length;
+
+  offset = 0;
+  endRecord.writeUInt32LE(0x06054b50, offset); offset += 4;
+  endRecord.writeUInt16LE(0, offset); offset += 2;
+  endRecord.writeUInt16LE(0, offset); offset += 2;
+  endRecord.writeUInt16LE(1, offset); offset += 2;
+  endRecord.writeUInt16LE(1, offset); offset += 2;
+  endRecord.writeUInt32LE(centralDirectorySize, offset); offset += 4;
+  endRecord.writeUInt32LE(centralDirectoryOffset, offset); offset += 4;
+  endRecord.writeUInt16LE(0, offset);
+
+  return Buffer.concat([
+    localHeader,
+    fileName,
+    data,
+    centralHeader,
+    fileName,
+    endRecord,
+  ]);
+}
 
 test("parse uncompressed archive", function (t) {
   const archive = path.join(__dirname, '../testData/uncompressed/archive.zip');
@@ -79,6 +142,42 @@ test("do not extract zip slip archive", function (t) {
   });
 });
 
+test("do not extract zip slip archive whose target has the destination as a prefix", function (t) {
+  temp.mkdir('node-zipslip-prefix-', function (err, dirPath) {
+    if (err) {
+      throw err;
+    }
+
+    const siblingPath = dirPath + '-evil';
+    const attackPath = path.join(siblingPath, 'hacked.txt');
+    const entryPath = path.relative(dirPath, attackPath).replace(/\\/g, '/');
+    const archive = createStoredZip(entryPath, 'hacked');
+    const archiveStream = new Stream.PassThrough();
+    const unzipExtractor = unzip.Extract({ path: dirPath });
+
+    unzipExtractor.on('error', function(err) {
+      throw err;
+    });
+    unzipExtractor.on('close', testNoSlip);
+
+    archiveStream.end(archive);
+    archiveStream.pipe(unzipExtractor);
+
+    function testNoSlip() {
+      const mode = fs.F_OK | (fs.constants && fs.constants.F_OK);
+      return fs.access(attackPath, mode, function(accessErr) {
+        if (accessErr) {
+          t.pass('no zip slip to sibling prefix directory');
+        } else {
+          t.fail('evil file created at "' + attackPath + '"');
+          fs.unlinkSync(attackPath);
+        }
+        t.end();
+      });
+    }
+  });
+});
+
 function testZipSlipArchive(t, slipFileName, attackPathFactory){
   const archive = path.join(__dirname, '../testData/zip-slip', slipFileName);
 
@@ -136,4 +235,3 @@ test("do not extract zip slip archive(Windows)", function (t) {
 
   testZipSlipArchive(t, 'zip-slip-win.zip', pathFactory);
 });
-
