@@ -1,12 +1,12 @@
-const test = require("tap").test;
-const fs = require("fs");
-const unzip = require("../");
-const os = require("os");
-const request = require("request");
+import { test } from "tap";
+import fs from "fs";
+import { Open } from "../index.js";
+import os from "os";
+import request from "request";
 
 test("extract zip from url", function (t) {
   const extractPath = os.tmpdir() + "/node-unzip-extract-fromURL"; // Not using path resolve, cause it should be resolved in extract() function
-  unzip.Open.url(
+  Open.url(
     request,
     "https://github.com/h5bp/html5-boilerplate/releases/download/v7.3.0/html5-boilerplate_v7.3.0.zip"
   )

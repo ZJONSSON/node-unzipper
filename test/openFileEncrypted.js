@@ -1,12 +1,11 @@
-const test = require('tap').test;
-const fs = require('fs');
-const path = require('path');
-const unzip = require('../');
+import { test } from 'tap';
+import fs from 'fs';
+import { Open } from '../index.js';
 
-const archive = path.join(__dirname, '../testData/compressed-encrypted/archive.zip');
+const archive = './testData/compressed-encrypted/archive.zip';
 
 test("get content of a single file entry out of a zip", function (t) {
-  return unzip.Open.file(archive)
+  return Open.file(archive)
     .then(function(d) {
       const file = d.files.filter(function(file) {
         return file.path == 'file.txt';
@@ -14,7 +13,7 @@ test("get content of a single file entry out of a zip", function (t) {
 
       return file.buffer('abc123')
         .then(function(str) {
-          const fileStr = fs.readFileSync(path.join(__dirname, '../testData/compressed-standard/inflated/file.txt'), 'utf8');
+          const fileStr = fs.readFileSync('./testData/compressed-standard/inflated/file.txt', 'utf8');
           t.equal(str.toString(), fileStr);
           t.end();
         });
@@ -22,7 +21,7 @@ test("get content of a single file entry out of a zip", function (t) {
 });
 
 test("error if password is missing", function (t) {
-  return unzip.Open.file(archive)
+  return Open.file(archive)
     .then(function(d) {
       const file = d.files.filter(function(file) {
         return file.path == 'file.txt';
@@ -41,7 +40,7 @@ test("error if password is missing", function (t) {
 });
 
 test("error if password is wrong", function (t) {
-  return unzip.Open.file(archive)
+  return Open.file(archive)
     .then(function(d) {
       const file = d.files.filter(function(file) {
         return file.path == 'file.txt';

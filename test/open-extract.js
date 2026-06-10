@@ -1,31 +1,31 @@
-const test = require('tap').test;
-const path = require('path');
-const temp = require('temp');
-const dirdiff = require('dirdiff');
-const unzip = require('../');
-const fs = require('fs-extra');
+import { test } from 'tap';
+import path from 'path';
+import temp from 'temp';
+import dirdiff from 'dirdiff';
+import { Open } from '../index.js';
+import fs from 'fs';
 
 
 test("extract compressed archive with open.file.extract", function (t) {
-  const archive = path.join(__dirname, '../testData/compressed-standard/archive.zip');
+  const archive = './testData/compressed-standard/archive.zip';
 
   temp.mkdir('node-unzip-2', function (err, dirPath) {
     if (err) {
       throw err;
     }
-    unzip.Open.file(archive)
+    Open.file(archive)
       .then(function(d) {
         return d.extract({path: dirPath});
       })
       .then(async function() {
-        const root = path.resolve(__dirname, '../testData/compressed-standard/inflated');
+        const root = './testData/compressed-standard/inflated';
 
         // since empty directories can not be checked into git we have to
         // create them
-        await fs.ensureDir(path.resolve(root, 'emptydir'));
-        await fs.ensureDir(path.resolve(root, 'emptyroot/emptydir'));
+        await fs.promises.mkdir(path.resolve(root, 'emptydir'), { recursive: true });
+        await fs.promises.mkdir(path.resolve(root, 'emptyroot/emptydir'), { recursive: true });
 
-        dirdiff(path.join(__dirname, '../testData/compressed-standard/inflated'), dirPath, {
+        dirdiff('./testData/compressed-standard/inflated', dirPath, {
           fileContents: true
         }, function (err, diffs) {
           if (err) {
