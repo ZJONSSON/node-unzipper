@@ -291,7 +291,7 @@ Example using `stream.Transform`:
 ```js
 fs.createReadStream('path/to/archive.zip')
   .pipe(unzipper.Parse())
-  .pipe(new stream.Transform({
+  .pipe(stream.Transform({
     objectMode: true,
     transform: function(entry,e,cb) {
       const fileName = entry.path;
