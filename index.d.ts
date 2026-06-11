@@ -1,8 +1,8 @@
 // Copy-pasted on Jun 10th, 2026 from `DefinitelyTyped`:
 // https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/unzipper/index.d.ts
 
-import { ClientRequest, RequestOptions } from "node:http";
-import { Duplex, PassThrough, Readable, Transform } from "node:stream";
+import { ClientRequest, RequestOptions } from "http"; // "node:http"
+import { Duplex, PassThrough, Readable, Transform } from "stream"; // "node:stream"
 
 export interface PullStream extends Duplex {
     stream(eof: number | string, includeEof: boolean): PassThrough;

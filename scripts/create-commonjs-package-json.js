@@ -2,7 +2,7 @@
 // That marks that whole folder as CommonJS so that Node.js doesn't complain
 // about `require()`-ing those files.
 
-import fs from 'node:fs';
+import fs from 'fs'; // 'node:fs'
 
 fs.writeFileSync('./dist/package.json', JSON.stringify({
   name: 'unzipper/dist',
