@@ -3,5 +3,6 @@
 /test.js
 /.nyc_output/
 /coverage/
+/dist/
 .tap/
 package-lock.json

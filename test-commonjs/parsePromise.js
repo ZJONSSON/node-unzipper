@@ -1,8 +1,8 @@
 'use strict';
 
-import { test } from 'tap';
-import fs from 'fs';
-import { Parse } from '../index.js';
+const test = require('tap').test;
+const fs = require('fs');
+const unzipper = require('../index.cjs');
 
 let entryRead;
 
@@ -10,7 +10,7 @@ test("promise should resolve when entries have been processed", function (t) {
   const archive = './testData/compressed-standard/archive.zip';
 
   fs.createReadStream(archive)
-    .pipe(Parse())
+    .pipe(unzipper.Parse())
     .on('entry', function(entry) {
       if (entry.path !== 'file.txt')
         return entry.autodrain();
@@ -34,7 +34,7 @@ test("promise should be rejected if there is an error in the stream", function (
   const archive = './testData/compressed-standard/archive.zip';
 
   fs.createReadStream(archive)
-    .pipe(Parse())
+    .pipe(unzipper.Parse())
     .on('entry', function() {
       this.emit('error', new Error('this is an error'));
     })
