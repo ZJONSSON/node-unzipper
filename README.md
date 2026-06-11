@@ -101,13 +101,13 @@ const googleStorageOptions = {
       key: google.storage.credentials.private_key,
       scopes: ['https://www.googleapis.com/auth/devstorage.read_only']
   }
-});
+};
 
 async function getFile(req, res, next) {
   const directory = await unzipper.Open.url(request, googleStorageOptions);
   const file = zip.files.find((file) => file.path === 'my-filename');
   return file.stream().pipe(res);
-});
+};
 ```
 
 
@@ -202,7 +202,7 @@ Example (with concurrency of 5):
 
 ```js
 unzip.Open.file('path/to/archive.zip')
-  .then(d => d.extract({path: '/extraction/path', concurrency: 5}));
+  .then(directory => directory.extract({path: '/extraction/path', concurrency: 5}));
 ```
 
 
