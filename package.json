@@ -36,7 +36,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "duplexer3": "^1.0.0",
     "graceful-fs": "^4.2.2",
     "node-int64": "^0.4.0",
     "p-map": "^7.0.4"
