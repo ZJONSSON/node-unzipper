@@ -1,6 +1,5 @@
 import { test } from 'tap';
 import fs from 'fs';
-import path from 'path';
 import streamBuffers from "stream-buffers";
 import { Parse } from '../index.js';
 import Stream from 'stream';

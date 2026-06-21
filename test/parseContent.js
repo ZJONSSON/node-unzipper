@@ -1,6 +1,5 @@
 import { test } from 'tap';
 import fs from 'fs';
-import path from 'path';
 import { Parse } from '../index.js';
 
 test("get content of a single file entry out of a zip", function (t) {
