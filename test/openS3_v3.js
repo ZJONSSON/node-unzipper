@@ -1,9 +1,9 @@
 import { test } from "tap";
 import fs from "fs";
 import path from "path";
-import Stream from "stream";
+import Stream from "stream"; // "node:stream"
 import { Open } from "../index.js";
-import { S3Client, GetObjectCommand, HeadObjectCommand } from "@aws-sdk/client-s3";
+import { GetObjectCommand, HeadObjectCommand } from "@aws-sdk/client-s3";
 
 global.GetObjectCommand = GetObjectCommand;
 global.HeadObjectCommand = HeadObjectCommand;
