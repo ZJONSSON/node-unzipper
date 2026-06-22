@@ -2,8 +2,8 @@
 // https://github.com/sindresorhus/duplexer3/blob/main/test.js
 
 import { test } from 'tap';
-import assert from 'node:assert';
-import stream from 'node:stream';
+import assert from 'assert'; // 'node:assert'
+import stream from 'stream'; // 'node:stream'
 import DuplexStream from '../lib/DuplexStream.js';
 
 function createWritableStream() {
