@@ -3,10 +3,6 @@ import fs from "fs";
 import path from "path";
 import Stream from "stream"; // "node:stream"
 import { Open } from "../index.js";
-import { GetObjectCommand, HeadObjectCommand } from "@aws-sdk/client-s3";
-
-global.GetObjectCommand = GetObjectCommand;
-global.HeadObjectCommand = HeadObjectCommand;
 
 const version = +process.version.replace("v", "").split(".")[0];
 
