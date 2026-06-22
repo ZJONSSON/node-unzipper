@@ -74,7 +74,7 @@
     "build": "npm run clean-for-build && npm run build-commonjs",
     "clean-for-build": "rimraf ./dist",
     "build-commonjs-modules": "cross-env BABEL_ENV=commonjs babel ./lib --out-dir ./dist --source-maps",
-    "build-commonjs-package.json": "node scripts/create-commonjs-package-json.js",
+    "build-commonjs-package.json": "node scripts/create-commonjs-package-json.cjs",
     "build-commonjs": "npm run build-commonjs-modules && npm run build-commonjs-package.json",
     "test": "npx tap test/*.js --coverage-report=html --lines=90 --functions=85 --statements=90 --branches=80 --reporter=dot",
     "test-commonjs": "npx tap test-commonjs/*.js --coverage-report=html --lines=90 --functions=85 --statements=90 --branches=80 --reporter=dot",
