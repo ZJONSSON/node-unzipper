@@ -46,7 +46,7 @@
     "@babel/preset-env": "^7.29.7",
     "@eslint/js": "^9.2.0",
     "aws-sdk": "^2.1636.0",
-    "cross-env": "^10.1.0",
+    "cross-env": "^6.0.3",
     "dirdiff": ">= 0.0.1 < 1",
     "eslint": "^9.2.0",
     "globals": "^15.2.0",
