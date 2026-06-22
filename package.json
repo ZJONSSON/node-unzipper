@@ -81,7 +81,7 @@
     "build-commonjs-modules": "cross-env BABEL_ENV=commonjs babel ./lib --out-dir ./dist --source-maps",
     "build-commonjs-package.json": "node scripts/create-commonjs-package-json.cjs",
     "build-commonjs": "npm run build-commonjs-modules && npm run build-commonjs-package.json",
-    "test": "npx tap test/*.js --coverage-report=html --lines=90 --functions=85 --statements=90 --branches=80 --reporter=dot",
+    "test": "npx tap --node-arg=--experimental-modules test/*.js --coverage-report=html --lines=90 --functions=85 --statements=90 --branches=80 --reporter=dot",
     "test-commonjs": "npx tap test-commonjs/*.js --coverage-report=html --lines=90 --functions=85 --statements=90 --branches=80 --reporter=dot",
     "prepublishOnly": "npm test && npm run build && npm run test-commonjs"
   },
