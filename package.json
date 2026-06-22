@@ -6,8 +6,7 @@
   "exports": {
     ".": {
       "import": "./index.js",
-      "require": "./index.cjs",
-      "types": "./index.d.ts"
+      "require": "./index.cjs"
     }
   },
   "description": "Unzip cross-platform streaming API ",
