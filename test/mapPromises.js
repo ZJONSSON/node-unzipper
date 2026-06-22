@@ -2,11 +2,6 @@
 // https://github.com/sindresorhus/p-map/blob/main/index.js
 
 import { test } from 'tap';
-import delay from 'delay';
-import timeSpan from 'time-span';
-import randomInt from 'random-int';
-import chalk from 'chalk';
-import inRange from 'in-range';
 import pMap from '../lib/mapPromises.js';
 
 const sharedInput = [
@@ -78,17 +73,17 @@ class ThrowingIterator {
 }
 
 test('main', async t => {
-  const end = timeSpan();
+  const stop = measureInterval();
   t.deepEqual(await pMap(sharedInput, mapper), [10, 20, 30]);
 
   // We give it some leeway on both sides of the expected 300ms as the exact value depends on the machine and workload.
-  assertInRange(t, end(), {start: 290, end: 430});
+  assertInRange(t, stop(), {start: 290, end: 430});
 });
 
 test('concurrency: 1', async t => {
-  const end = timeSpan();
+  const stop = measureInterval();
   t.deepEqual(await pMap(sharedInput, mapper, {concurrency: 1}), [10, 20, 30]);
-  assertInRange(t, end(), {start: 590, end: 760});
+  assertInRange(t, stop(), {start: 590, end: 760});
 });
 
 test('concurrency: 4', async t => {
@@ -109,21 +104,30 @@ test('handles empty iterable', async t => {
 
 test('async with concurrency: 2 (random time sequence)', async t => {
   const input = Array.from({length: 10}).map(() => randomInt(0, 100));
-  const mapper = value => delay(value, {value});
+  const mapper = async (value) => {
+    await delay(value);
+    return value;
+  };
   const result = await pMap(input, mapper, {concurrency: 2});
   t.deepEqual(result, input);
 });
 
 test('async with concurrency: 2 (problematic time sequence)', async t => {
   const input = [100, 200, 10, 36, 13, 45];
-  const mapper = value => delay(value, {value});
+  const mapper = async (value) => {
+    await delay(value);
+    return value;
+  };
   const result = await pMap(input, mapper, {concurrency: 2});
   t.deepEqual(result, input);
 });
 
 test('async with concurrency: 2 (out of order time sequence)', async t => {
   const input = [200, 100, 50];
-  const mapper = value => delay(value, {value});
+  const mapper = async (value) => {
+    await delay(value);
+    return value;
+  };
   const result = await pMap(input, mapper, {concurrency: 2});
   t.deepEqual(result, input);
 });
@@ -148,7 +152,10 @@ test('aggregate errors when stopOnError is false', async t => {
 });
 
 test('all mappers should run when concurrency is infinite, even after stop-on-error happened', async t => {
-  const input = [1, async () => delay(300, {value: 2}), 3];
+  const input = [1, async () => {
+    await delay(300);
+    return 2;
+  }, 3];
   const mappedValues = [];
   await t.rejects(
     pMap(input, async value => {
@@ -270,10 +277,26 @@ test('invalid mapper', async t => {
   await t.rejects(pMap([], 'invalid mapper', {concurrency: 2}));
 });
 
-function assertInRange(t, value, {start = 0, end}) {
-  if (inRange(value, {start, end})) {
+function assertInRange(t, value, {start, end}) {
+  if (value >= start && value <= end) {
     t.pass();
   } else {
-    t.fail(`${start} ${start <= value ? '≤' : chalk.red('≰')} ${chalk.yellow(value)} ${value <= end ? '≤' : chalk.red('≰')} ${end}`);
+    t.fail(`${value} must be between ${start} and ${end}`);
   }
+}
+
+async function delay(ms) {
+  await new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function randomInt(minimum, maximum) {
+  return Math.floor(
+    (Math.random() * (maximum - minimum + 1)) + minimum
+  );
+}
+
+function measureInterval() {
+  const startedAt = process.hrtime.bigint();
+  const toMilliseconds = (hrtime) => Number(hrtime) / 1000000;
+  return () => toMilliseconds(process.hrtime.bigint() - startedAt);
 }

@@ -47,18 +47,15 @@
     "@eslint/js": "^9.2.0",
     "aws-sdk": "^2.1636.0",
     "cross-env": "^10.1.0",
-    "delay": "^7.0.0",
     "dirdiff": ">= 0.0.1 < 1",
     "eslint": "^9.2.0",
     "globals": "^15.2.0",
     "iconv-lite": "^0.4.24",
-    "in-range": "^3.0.0",
     "request": "^2.88.0",
     "rimraf": "^3.0.2",
     "stream-buffers": ">= 0.2.5 < 1",
     "tap": "^16.3.10",
-    "temp": ">= 0.4.0 < 1",
-    "time-span": "^5.1.0"
+    "temp": ">= 0.4.0 < 1"
   },
   "directories": {
     "example": "examples",
