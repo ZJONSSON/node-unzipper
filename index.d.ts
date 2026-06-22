@@ -1,4 +1,4 @@
-// Copy-pasted on Jun 10th, 2026 from `DefinitelyTyped`:
+// Copy-pasted on Jun 22th, 2026 from `DefinitelyTyped`:
 // https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/unzipper/index.d.ts
 
 import { ClientRequest, RequestOptions } from "http"; // "node:http"
