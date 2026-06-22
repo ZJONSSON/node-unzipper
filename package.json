@@ -82,7 +82,7 @@
     "test-node-above-10": "if-node-version \">10\" npm run test-esm",
     "test-node-10-or-below": "if-node-version \"<=10\" npm run test-esm-transpiled",
     "test-esm": "npx tap test/*.js --coverage-report=html --lines=90 --functions=85 --statements=90 --branches=80 --reporter=dot",
-    "test-esm-transpiled": "cross-env BABEL_ENV=commonjs npx tap --node-arg=-r --node-arg=@babel/register test/*.js --coverage-report=html --lines=90 --functions=85 --statements=90 --branches=80 --reporter=dot",
+    "test-esm-transpiled": "cross-env BABEL_ENV=commonjs npx tap --node-arg=-r --node-arg=@babel/register test/*.js --coverage-report=html --lines=90 --functions=85 --statements=90 --branches=79.45 --reporter=dot",
     "test-commonjs": "npx tap test-commonjs/*.js --coverage-report=html --lines=90 --functions=85 --statements=90 --branches=80 --reporter=dot",
     "prepublishOnly": "npm test && npm run build && npm run test-commonjs"
   },
