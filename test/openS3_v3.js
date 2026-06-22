@@ -1,4 +1,7 @@
 import { test } from "tap";
+import fs from "fs";
+import path from "path";
+import Stream from "stream";
 import { Open } from "../index.js";
 import { S3Client, GetObjectCommand, HeadObjectCommand } from "@aws-sdk/client-s3";
 
@@ -7,29 +10,52 @@ global.HeadObjectCommand = HeadObjectCommand;
 
 const version = +process.version.replace("v", "").split(".")[0];
 
+function createS3ClientMock(buffer) {
+  return {
+    send: async function(command) {
+      if (command.constructor.name == "HeadObjectCommand") {
+        return {
+          ContentLength: buffer.length,
+        };
+      }
+
+      if (command.constructor.name == "GetObjectCommand") {
+        const match = command.input.Range.match(/^bytes=(\d+)-(\d*)$/);
+        const offset = Number(match[1]);
+        const end = match[2] ? Number(match[2]) + 1 : undefined;
+        const stream = Stream.PassThrough();
+
+        stream.end(buffer.slice(offset, end));
+
+        return {
+          Body: stream,
+        };
+      }
+
+      throw new Error("Unexpected command: " + command.constructor.name);
+    },
+  };
+}
+
 test(
   "get content of a single file entry out of a zip",
   { skip: version < 16 },
   function (t) {
-    const client = new S3Client({
-      region: "us-east-1",
-      signer: { sign: async (request) => request },
-    });
-
-    // These files are provided by AWS's open data registry project.
-    // https://github.com/awslabs/open-data-registry
+    const archive = path.join(__dirname, "../testData/compressed-standard/archive.zip");
+    const buffer = fs.readFileSync(archive);
+    const client = createS3ClientMock(buffer);
 
     return Open.s3_v3(client, {
-      Bucket: "wikisum",
-      Key: "WikiSumDataset.zip",
+      Bucket: "test",
+      Key: "archive.zip",
     }).then(function (d) {
       const file = d.files.filter(function (file) {
-        return file.path == "WikiSumDataset/LICENSE.txt";
+        return file.path == "file.txt";
       })[0];
 
-      return file.buffer().then(function (b) {
-        const firstLine = b.toString().split("\n")[0];
-        t.equal(firstLine, "Attribution-NonCommercial-ShareAlike 3.0 Unported");
+      return file.buffer().then(function (str) {
+        const fileStr = fs.readFileSync(path.join(__dirname, "../testData/compressed-standard/inflated/file.txt"), "utf8");
+        t.equal(str.toString(), fileStr);
         t.end();
       });
     });

@@ -1,5 +1,6 @@
 {
   "name": "unzipper",
+<<<<<<< HEAD
   "version": "0.13.0",
   "type": "module",
   "main": "./index.cjs",
@@ -10,8 +11,11 @@
       "types": "./index.d.ts"
     }
   },
+=======
+  "version": "0.12.5",
+>>>>>>> aaf77f0c7b4d29af500b0aa9c0e2aa2ade0a2618
   "description": "Unzip cross-platform streaming API ",
-  "author": "Evan Oxfeld <eoxfeld@gmail.com>",
+  "author": "Ziggy Jonsson <ziggy.jonsson.nyc@gmail.com>",
   "contributors": [
     {
       "name": "Ziggy Jonsson",
@@ -36,6 +40,12 @@
   },
   "license": "MIT",
   "dependencies": {
+<<<<<<< HEAD
+=======
+    "bluebird": "~3.7.2",
+    "duplexer2": "~0.1.4",
+    "fs-extra": "11.3.1",
+>>>>>>> aaf77f0c7b4d29af500b0aa9c0e2aa2ade0a2618
     "graceful-fs": "^4.2.2",
     "node-int64": "^0.4.0"
   },
