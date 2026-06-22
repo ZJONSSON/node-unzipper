@@ -1,6 +1,5 @@
 import { test } from "tap";
 import fs from "fs";
-import path from "path";
 import Stream from "stream"; // "node:stream"
 import { Open } from "../index.js";
 
@@ -37,7 +36,7 @@ test(
   "get content of a single file entry out of a zip",
   { skip: version < 16 },
   function (t) {
-    const archive = path.join(__dirname, "../testData/compressed-standard/archive.zip");
+    const archive = "./testData/compressed-standard/archive.zip";
     const buffer = fs.readFileSync(archive);
     const client = createS3ClientMock(buffer);
 
@@ -50,7 +49,7 @@ test(
       })[0];
 
       return file.buffer().then(function (str) {
-        const fileStr = fs.readFileSync(path.join(__dirname, "../testData/compressed-standard/inflated/file.txt"), "utf8");
+        const fileStr = fs.readFileSync("./testData/compressed-standard/inflated/file.txt", "utf8");
         t.equal(str.toString(), fileStr);
         t.end();
       });
