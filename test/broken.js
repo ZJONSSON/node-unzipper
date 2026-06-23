@@ -1,15 +1,14 @@
-const test = require('tap').test;
-const fs = require('fs');
-const path = require('path');
-const temp = require('temp');
-const unzip = require('../');
+import { test } from 'tap';
+import fs from 'fs';
+import temp from 'temp';
+import { Parse, Extract } from '../index.js';
 
 
 test("Parse a broken zipfile", function (t) {
-  const archive = path.join(__dirname, '../testData/compressed-standard/broken.zip');
+  const archive = './testData/compressed-standard/broken.zip';
 
   fs.createReadStream(archive)
-    .pipe(unzip.Parse())
+    .pipe(Parse())
     .on('entry', function(entry) {
       return entry.autodrain();
     })
@@ -22,13 +21,13 @@ test("Parse a broken zipfile", function (t) {
 
 
 test("extract a broken", function (t) {
-  const archive = path.join(__dirname, '../testData/compressed-standard/broken.zip');
+  const archive = './testData/compressed-standard/broken.zip';
 
   temp.mkdir('node-unzip-', function (err, dirPath) {
     if (err) {
       throw err;
     }
-    const unzipExtractor = unzip.Extract({ path: dirPath });
+    const unzipExtractor = Extract({ path: dirPath });
 
     fs.createReadStream(archive)
       .pipe(unzipExtractor)

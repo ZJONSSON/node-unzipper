@@ -1,15 +1,15 @@
-const test = require('tap').test;
-const fs = require('fs-extra');
-const path = require('path');
-const temp = require('temp');
-const dirdiff = require('dirdiff');
-const unzip = require('../');
-const il = require('iconv-lite');
+import { test } from 'tap';
+import fs from 'fs';
+import path from 'path';
+import temp from 'temp';
+import dirdiff from 'dirdiff';
+import { Parse, Extract } from '../index.js';
+import il from 'iconv-lite';
 
 test("parse compressed archive (created by POSIX zip)", function (t) {
-  const archive = path.join(__dirname, '../testData/compressed-standard/archive.zip');
+  const archive = './testData/compressed-standard/archive.zip';
 
-  const unzipParser = unzip.Parse();
+  const unzipParser = Parse();
   fs.createReadStream(archive).pipe(unzipParser);
   unzipParser.on('error', function(err) {
     throw err;
@@ -19,9 +19,9 @@ test("parse compressed archive (created by POSIX zip)", function (t) {
 });
 
 test("parse compressed archive (created by DOS zip)", function (t) {
-  const archive = path.join(__dirname, '../testData/compressed-cp866/archive.zip');
+  const archive = './testData/compressed-cp866/archive.zip';
 
-  const unzipParser = unzip.Parse();
+  const unzipParser = Parse();
   fs.createReadStream(archive).pipe(unzipParser);
   unzipParser.on('entry', function(entry) {
     const fileName = entry.props.flags.isUnicode ? entry.path : il.decode(entry.props.pathBuffer, 'cp866');
@@ -35,13 +35,13 @@ test("parse compressed archive (created by DOS zip)", function (t) {
 });
 
 test("extract compressed archive w/ file sizes known prior to zlib inflation (created by POSIX zip)", function (t) {
-  const archive = path.join(__dirname, '../testData/compressed-standard/archive.zip');
+  const archive = './testData/compressed-standard/archive.zip';
 
   temp.mkdir('node-unzip-', function (err, dirPath) {
     if (err) {
       throw err;
     }
-    const unzipExtractor = unzip.Extract({ path: dirPath });
+    const unzipExtractor = Extract({ path: dirPath });
     unzipExtractor.on('error', function(err) {
       throw err;
     });
@@ -50,14 +50,14 @@ test("extract compressed archive w/ file sizes known prior to zlib inflation (cr
     fs.createReadStream(archive).pipe(unzipExtractor);
 
     async function testExtractionResults() {
-      const root = path.resolve(__dirname, '../testData/compressed-standard/inflated');
+      const root = './testData/compressed-standard/inflated';
 
       // since empty directories can not be checked into git we have to
       // create them
-      await fs.ensureDir(path.resolve(root, 'emptydir'));
-      await fs.ensureDir(path.resolve(root, 'emptyroot/emptydir'));
+      await fs.promises.mkdir(path.resolve(root, 'emptydir'), { recursive: true });
+      await fs.promises.mkdir(path.resolve(root, 'emptyroot/emptydir'), { recursive: true });
 
-      dirdiff(path.join(__dirname, '../testData/compressed-standard/inflated'), dirPath, {
+      dirdiff('./testData/compressed-standard/inflated', dirPath, {
         fileContents: true
       }, function (err, diffs) {
         if (err) {

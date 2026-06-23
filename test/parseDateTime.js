@@ -1,12 +1,11 @@
-const test = require('tap').test;
-const path = require('path');
-const unzip = require('../');
-const fs = require('fs');
+import { test } from 'tap';
+import { Open, ParseOne } from '../index.js';
+import fs from 'fs';
 
-const archive = path.join(__dirname, '../testData/compressed-standard/archive.zip');
+const archive = './testData/compressed-standard/archive.zip';
 
 test('parse datetime using Open', function (t) {
-  return unzip.Open.file(archive)
+  return Open.file(archive)
     .then(function(d) {
       const file = d.files.filter(function(file) {
         return file.path == 'file.txt';
@@ -18,7 +17,7 @@ test('parse datetime using Open', function (t) {
 
 test('parse datetime using Parse', function(t) {
   fs.createReadStream(archive)
-    .pipe(unzip.ParseOne('file.txt'))
+    .pipe(ParseOne('file.txt'))
     .on('entry', function(entry) {
       if (entry.path !== 'file.txt')
         return entry.autodrain();
