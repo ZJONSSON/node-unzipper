@@ -1,6 +1,6 @@
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
-[![code coverage](https://zjonsson.github.io/node-unzipper/badge.svg)](https://zjonsson.github.io/node-unzipper/) 
+[![code coverage](https://zjonsson.github.io/node-unzipper/badge.svg)](https://zjonsson.github.io/node-unzipper/)
 
 [npm-image]: https://img.shields.io/npm/v/unzipper.svg
 [npm-url]: https://npmjs.org/package/unzipper
@@ -23,7 +23,7 @@ $ npm install unzipper
 
 The open methods allow random access to the underlying files of a zip archive, from disk or from the web, s3 or a custom source.
 
-The open methods return a promise on the contents of the central directory of a zip file, with individual `files` listed in an array.  
+The open methods return a promise on the contents of the central directory of a zip file, with individual `files` listed in an array.
 
 Each file record has the following methods, providing random access to the underlying files:
 * `stream([password])` - returns a stream of the unzipped content which can be piped to any destination
@@ -101,13 +101,13 @@ const googleStorageOptions = {
       key: google.storage.credentials.private_key,
       scopes: ['https://www.googleapis.com/auth/devstorage.read_only']
   }
-});
+};
 
 async function getFile(req, res, next) {
   const directory = await unzipper.Open.url(request, googleStorageOptions);
   const file = zip.files.find((file) => file.path === 'my-filename');
   return file.stream().pipe(res);
-});
+};
 ```
 
 
@@ -171,7 +171,7 @@ async function main() {
   const storage = new Storage();
   const bucket = storage.bucket('my-bucket');
   const zipFile = bucket.file('my-zip-file.zip');
-  
+
   const customSource = {
     stream: function(offset, length) {
       return zipFile.createReadStream({
@@ -202,13 +202,13 @@ Example (with concurrency of 5):
 
 ```js
 unzip.Open.file('path/to/archive.zip')
-  .then(d => d.extract({path: '/extraction/path', concurrency: 5}));
+  .then(directory => directory.extract({path: '/extraction/path', concurrency: 5}));
 ```
 
 
 Please note:  Methods that use the Central Directory instead of parsing entire file can be found under [`Open`](#open)
 
-Chrome extension files (.crx) are zipfiles with an [extra header](http://www.adambarth.com/experimental/crx/docs/crx.html) at the start of the file.  Unzipper will parse .crx file with the streaming methods (`Parse` and `ParseOne`). 
+Chrome extension files (.crx) are zipfiles with an [extra header](http://www.adambarth.com/experimental/crx/docs/crx.html) at the start of the file.  Unzipper will parse .crx file with the streaming methods (`Parse` and `ParseOne`).
 
 
 ## Streaming an entire zip file (legacy)
@@ -305,7 +305,6 @@ fs.createReadStream('path/to/archive.zip')
         cb();
       }
     }
-  }
   }));
 ```
 

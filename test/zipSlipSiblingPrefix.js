@@ -1,9 +1,9 @@
-const test = require('tap').test;
-const fs = require('fs');
-const path = require('path');
-const os = require('os');
-const { Readable } = require('stream');
-const unzipper = require('..');
+import { test } from 'tap';
+import fs from 'fs';
+import path from 'path';
+import os from 'os';
+import { Readable } from 'stream'; // 'node:stream'
+import { Open, Extract } from '../index.js';
 
 // Compute CRC32 for STORED zip entries
 function crc32(buf) {
@@ -93,7 +93,7 @@ test('Extract blocks sibling-prefix path traversal via unzipper.Extract', functi
   src.push(zip);
   src.push(null);
 
-  const extractor = src.pipe(unzipper.Extract({ path: dest }));
+  const extractor = src.pipe(Extract({ path: dest }));
   extractor.on('close', function() {
     t.notOk(fs.existsSync(path.join(sibling, 'escaped.txt')), 'file must not escape to sibling directory');
     t.end();
@@ -114,7 +114,7 @@ test('Extract allows normal entries within destination', function(t) {
   src.push(zip);
   src.push(null);
 
-  const extractor = src.pipe(unzipper.Extract({ path: dest }));
+  const extractor = src.pipe(Extract({ path: dest }));
   extractor.on('close', function() {
     t.ok(fs.existsSync(path.join(dest, 'subdir', 'file.txt')), 'normal entry must be extracted');
     t.end();
@@ -130,7 +130,7 @@ test('Open.extract blocks sibling-prefix path traversal', function(t) {
 
   const zip = makeZip('../dest-evil/escaped.txt', 'pwned');
 
-  unzipper.Open.buffer(zip)
+  Open.buffer(zip)
     .then(function(d) {
       return d.extract({ path: dest });
     })
@@ -151,7 +151,7 @@ test('Open.extract allows normal entries within destination', function(t) {
 
   const zip = makeZip('subdir/file.txt', 'hello');
 
-  unzipper.Open.buffer(zip)
+  Open.buffer(zip)
     .then(function(d) {
       return d.extract({ path: dest });
     })

@@ -1,13 +1,12 @@
-const test = require('tap').test;
-const fs = require('fs');
-const path = require('path');
-const unzip = require('../');
+import { test } from 'tap';
+import fs from 'fs';
+import { Parse } from '../index.js';
 
 test("verify that immediate autodrain does not unzip", function (t) {
-  const archive = path.join(__dirname, '../testData/compressed-standard/archive.zip');
+  const archive = './testData/compressed-standard/archive.zip';
 
   fs.createReadStream(archive)
-    .pipe(unzip.Parse())
+    .pipe(Parse())
     .on('entry', function(entry) {
       entry.autodrain()
         .on('finish', function() {
@@ -20,10 +19,10 @@ test("verify that immediate autodrain does not unzip", function (t) {
 });
 
 test("verify that autodrain promise works", function (t) {
-  const archive = path.join(__dirname, '../testData/compressed-standard/archive.zip');
+  const archive = './testData/compressed-standard/archive.zip';
 
   fs.createReadStream(archive)
-    .pipe(unzip.Parse())
+    .pipe(Parse())
     .on('entry', function(entry) {
       entry.autodrain()
         .promise()
@@ -37,10 +36,10 @@ test("verify that autodrain promise works", function (t) {
 });
 
 test("verify that autodrain resolves after it has finished", function (t) {
-  const archive = path.join(__dirname, '../testData/compressed-standard/archive.zip');
+  const archive = './testData/compressed-standard/archive.zip';
 
   fs.createReadStream(archive)
-    .pipe(unzip.Parse())
+    .pipe(Parse())
     .on('entry', entry => entry.autodrain())
     .on('end', () => t.end());
 });

@@ -1,15 +1,15 @@
-const test = require('tap').test;
-const fs = require('fs');
-const os = require('os');
-const path = require('path');
-const temp = require('temp');
-const dirdiff = require('dirdiff');
-const unzip = require('../');
+import { test } from 'tap';
+import fs from 'fs';
+import os from 'os';
+import path from 'path';
+import temp from 'temp';
+import dirdiff from 'dirdiff';
+import { Extract, Parse } from '../index.js';
 
 test("parse uncompressed archive", function (t) {
-  const archive = path.join(__dirname, '../testData/uncompressed/archive.zip');
+  const archive = './testData/uncompressed/archive.zip';
 
-  const unzipParser = unzip.Parse();
+  const unzipParser = Parse();
   fs.createReadStream(archive).pipe(unzipParser);
   unzipParser.on('error', function(err) {
     throw err;
@@ -19,13 +19,13 @@ test("parse uncompressed archive", function (t) {
 });
 
 test("extract uncompressed archive", function (t) {
-  const archive = path.join(__dirname, '../testData/uncompressed/archive.zip');
+  const archive = './testData/uncompressed/archive.zip';
 
   temp.mkdir('node-unzip-', function (err, dirPath) {
     if (err) {
       throw err;
     }
-    const unzipExtractor = unzip.Extract({ path: dirPath });
+    const unzipExtractor = Extract({ path: dirPath });
     unzipExtractor.on('error', function(err) {
       throw err;
     });
@@ -34,7 +34,7 @@ test("extract uncompressed archive", function (t) {
     fs.createReadStream(archive).pipe(unzipExtractor);
 
     function testExtractionResults() {
-      dirdiff(path.join(__dirname, '../testData/uncompressed/inflated'), dirPath, {
+      dirdiff('./testData/uncompressed/inflated', dirPath, {
         fileContents: true
       }, function (err, diffs) {
         if (err) {
@@ -48,13 +48,13 @@ test("extract uncompressed archive", function (t) {
 });
 
 test("do not extract zip slip archive", function (t) {
-  const archive = path.join(__dirname, '../testData/zip-slip/zip-slip.zip');
+  const archive = './testData/zip-slip/zip-slip.zip';
 
   temp.mkdir('node-zipslip-', function (err, dirPath) {
     if (err) {
       throw err;
     }
-    const unzipExtractor = unzip.Extract({ path: dirPath });
+    const unzipExtractor = Extract({ path: dirPath });
     unzipExtractor.on('error', function(err) {
       throw err;
     });
@@ -80,7 +80,7 @@ test("do not extract zip slip archive", function (t) {
 });
 
 function testZipSlipArchive(t, slipFileName, attackPathFactory){
-  const archive = path.join(__dirname, '../testData/zip-slip', slipFileName);
+  const archive = path.join('./testData/zip-slip', slipFileName);
 
   temp.mkdir('node-zipslip-' + slipFileName, function (err, dirPath) {
     if (err) {
@@ -93,7 +93,7 @@ function testZipSlipArchive(t, slipFileName, attackPathFactory){
         t.end();
       }
       else{
-        const unzipExtractor = unzip.Extract({ path: dirPath });
+        const unzipExtractor = Extract({ path: dirPath });
         unzipExtractor.on('error', function(err) {
           throw err;
         });
@@ -136,4 +136,3 @@ test("do not extract zip slip archive(Windows)", function (t) {
 
   testZipSlipArchive(t, 'zip-slip-win.zip', pathFactory);
 });
-

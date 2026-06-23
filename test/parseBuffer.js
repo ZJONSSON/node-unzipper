@@ -1,7 +1,7 @@
 'use strict';
 
-const test = require('tap').test;
-const parseBuffer = require('../lib/parseBuffer');
+import { test } from 'tap';
+import parseBuffer from '../lib/parseBuffer.js';
 
 const buf = Buffer.from([
   0x62,
@@ -22,7 +22,7 @@ const buf = Buffer.from([
 ]);
 
 test(`parse little endian values for increasing byte size`, function (t) {
-  const result = parseBuffer.parse(buf, [
+  const result = parseBuffer(buf, [
     ['key1', 1],
     ['key2', 2],
     ['key3', 4],
@@ -38,7 +38,7 @@ test(`parse little endian values for increasing byte size`, function (t) {
 });
 
 test(`parse little endian values for decreasing byte size`, function (t) {
-  const result = parseBuffer.parse(buf, [
+  const result = parseBuffer(buf, [
     ['key1', 8],
     ['key2', 4],
     ['key3', 2],
@@ -54,7 +54,7 @@ test(`parse little endian values for decreasing byte size`, function (t) {
 });
 
 test(`parse little endian values with null keys due to small buffer`, function (t) {
-  const result = parseBuffer.parse(buf, [
+  const result = parseBuffer(buf, [
     ['key1', 8],
     ['key2', 8],
     ['key3', 8],

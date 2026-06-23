@@ -1,10 +1,9 @@
-const test = require('tap').test;
-const fs = require('fs');
-const path = require('path');
-const unzip = require('../unzip');
+import { test } from 'tap';
+import fs from 'fs';
+import { Open } from '../index.js';
 
 test("get content of a single file entry out of a zip", function (t) {
-  const archive = path.join(__dirname, '../testData/compressed-standard/archive.zip');
+  const archive = './testData/compressed-standard/archive.zip';
 
   const customSource = {
     stream: function(offset, length) {
@@ -22,7 +21,7 @@ test("get content of a single file entry out of a zip", function (t) {
     }
   };
 
-  return unzip.Open.custom(customSource)
+  return Open.custom(customSource)
     .then(function(d) {
       const file = d.files.filter(function(file) {
         return file.path == 'file.txt';
@@ -30,7 +29,7 @@ test("get content of a single file entry out of a zip", function (t) {
 
       return file.buffer()
         .then(function(str) {
-          const fileStr = fs.readFileSync(path.join(__dirname, '../testData/compressed-standard/inflated/file.txt'), 'utf8');
+          const fileStr = fs.readFileSync('./testData/compressed-standard/inflated/file.txt', 'utf8');
           t.equal(str.toString(), fileStr);
           t.end();
         });

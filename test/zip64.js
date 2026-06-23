@@ -1,10 +1,9 @@
 'use strict';
 
-const t = require('tap');
-const path = require('path');
-const unzip = require('../');
-const fs = require('fs');
-const temp = require('temp');
+import t from 'tap';
+import { Parse, Extract, Open } from '../index.js';
+import fs from 'fs';
+import temp from 'temp';
 
 const UNCOMPRESSED_SIZE = 5368709120;
 const ZIP64_OFFSET = 72;
@@ -12,10 +11,10 @@ const ZIP64_SIZE = 36;
 const ZIP64_EXTRA_FIELD_OFFSET = 0;
 
 t.test('Correct uncompressed size for zip64', function (t) {
-  const archive = path.join(__dirname, '../testData/big.zip');
+  const archive = './testData/big.zip';
 
   t.test('in unzipper.Open', function(t) {
-    unzip.Open.file(archive)
+    Open.file(archive)
       .then(function(d) {
         const file = d.files[0];
         t.same(file.uncompressedSize, UNCOMPRESSED_SIZE, 'Open: Directory header');
@@ -34,7 +33,7 @@ t.test('Correct uncompressed size for zip64', function (t) {
 
   t.test('in unzipper.parse', function(t) {
     fs.createReadStream(archive)
-      .pipe(unzip.Parse())
+      .pipe(Parse())
       .on('entry', function(entry) {
         t.same(entry.vars.uncompressedSize, UNCOMPRESSED_SIZE, 'Parse: File header');
         t.end();
@@ -45,10 +44,10 @@ t.test('Correct uncompressed size for zip64', function (t) {
 });
 
 t.test('Parse files with all zip64 extra fields correctly', function (t) {
-  const archive = path.join(__dirname, '../testData/zip64-allextrafields.zip');
+  const archive = './testData/zip64-allextrafields.zip';
 
   t.test('in unzipper.Open', function(t) {
-    unzip.Open.file(archive)
+    Open.file(archive)
       .then(function(d) {
         d.files[0].stream()
           .on('vars', function(vars) {
@@ -73,7 +72,7 @@ t.test('Parse files with all zip64 extra fields correctly', function (t) {
         throw err;
       }
       fs.createReadStream(archive)
-        .pipe(unzip.Extract({ path: dirPath }))
+        .pipe(Extract({ path: dirPath }))
         .on('close', function() { t.end(); });
     });
   });
@@ -82,10 +81,10 @@ t.test('Parse files with all zip64 extra fields correctly', function (t) {
 });
 
 t.test('Parse files with zip64 extra field with only offset length correctly', function (t) {
-  const archive = path.join(__dirname, '../testData/zip64-extrafieldoffsetlength.zip');
+  const archive = './testData/zip64-extrafieldoffsetlength.zip';
 
   t.test('in unzipper.Open', function(t) {
-    unzip.Open.file(archive)
+    Open.file(archive)
       .then(function(d) {
         d.files[0].stream()
           .on('vars', function(vars) {
@@ -106,7 +105,7 @@ t.test('Parse files with zip64 extra field with only offset length correctly', f
         throw err;
       }
       fs.createReadStream(archive)
-        .pipe(unzip.Extract({ path: dirPath }))
+        .pipe(Extract({ path: dirPath }))
         .on('close', function() { t.end(); });
     });
   });
@@ -115,10 +114,10 @@ t.test('Parse files with zip64 extra field with only offset length correctly', f
 });
 
 t.test('Parse files from regular zip64 format correctly', function (t) {
-  const archive = path.join(__dirname, '../testData/zip64.zip');
+  const archive = './testData/zip64.zip';
 
   t.test('in unzipper.Open', function(t) {
-    unzip.Open.file(archive)
+    Open.file(archive)
       .then(function(d) {
         t.same(d.offsetToStartOfCentralDirectory, ZIP64_OFFSET, 'Open: Directory header');
         t.same(d.files.length, 1, 'Open: Files Size');
@@ -140,7 +139,7 @@ t.test('Parse files from regular zip64 format correctly', function (t) {
 
   t.test('in unzipper.parse', function(t) {
     fs.createReadStream(archive)
-      .pipe(unzip.Parse())
+      .pipe(Parse())
       .on('entry', function(entry) {
         t.same(entry.vars.uncompressedSize, ZIP64_SIZE, 'Parse: File header');
       })
@@ -153,7 +152,7 @@ t.test('Parse files from regular zip64 format correctly', function (t) {
         throw err;
       }
       fs.createReadStream(archive)
-        .pipe(unzip.Extract({ path: dirPath }))
+        .pipe(Extract({ path: dirPath }))
         .on('close', function() { t.end(); });
     });
   });
