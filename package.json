@@ -6,7 +6,8 @@
   "exports": {
     ".": {
       "import": "./index.js",
-      "require": "./index.cjs"
+      "require": "./index.cjs",
+      "types": "./index.d.ts"
     }
   },
   "description": "Unzip cross-platform streaming API ",
@@ -35,9 +36,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "bluebird": "~3.7.2",
-    "duplexer2": "~0.1.4",
-    "fs-extra": "11.3.1",
     "graceful-fs": "^4.2.2",
     "node-int64": "^0.4.0"
   },
