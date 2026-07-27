@@ -36,22 +36,27 @@ test(
   "get content of a single file entry out of a zip",
   { skip: version < 16 },
   function (t) {
-    const archive = "./testData/compressed-standard/archive.zip";
-    const buffer = fs.readFileSync(archive);
-    const client = createS3ClientMock(buffer);
+    return import("@aws-sdk/client-s3").then(({ GetObjectCommand, HeadObjectCommand }) => {
+      global.GetObjectCommand = GetObjectCommand;
+      global.HeadObjectCommand = HeadObjectCommand;
 
-    return Open.s3_v3(client, {
-      Bucket: "test",
-      Key: "archive.zip",
-    }).then(function (d) {
-      const file = d.files.filter(function (file) {
-        return file.path == "file.txt";
-      })[0];
+      const archive = "./testData/compressed-standard/archive.zip";
+      const buffer = fs.readFileSync(archive);
+      const client = createS3ClientMock(buffer);
 
-      return file.buffer().then(function (str) {
-        const fileStr = fs.readFileSync("./testData/compressed-standard/inflated/file.txt", "utf8");
-        t.equal(str.toString(), fileStr);
-        t.end();
+      return Open.s3_v3(client, {
+        Bucket: "test",
+        Key: "archive.zip",
+      }).then(function (d) {
+        const file = d.files.filter(function (file) {
+          return file.path == "file.txt";
+        })[0];
+
+        return file.buffer().then(function (str) {
+          const fileStr = fs.readFileSync("./testData/compressed-standard/inflated/file.txt", "utf8");
+          t.equal(str.toString(), fileStr);
+          t.end();
+        });
       });
     });
   }
